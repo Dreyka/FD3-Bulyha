@@ -1,0 +1,18 @@
+.IshopBlock {
+  width: 50%; }
+  .IshopBlock > .IshopBlockName {
+    display: block;
+    font-size: 24px;
+    font-weight: bold; }
+  .IshopBlock > .IshopBlockTable {
+    border: 1px solid black;
+    border-radius: 10px; }
+    .IshopBlock > .IshopBlockTable > .IshopBlockTableRow {
+      display: grid;
+      grid-template-columns: 40% 20% 25% 15%;
+      grid-template-rows: auto;
+      font-size: 20px;
+      line-height: 30px;
+      padding: 0px 15px; }
+
+/*# sourceMappingURL=IshopBlock.css.map */
