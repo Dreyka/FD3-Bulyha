@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAI;EACF,OAAO,EAAE,KAAK;;AAEhB,YAAY;EACV,OAAO,EAAE,KAAK",
+"sources": ["FilterBlock.scss"],
+"names": [],
+"file": "FilterBlock.css"
+}
