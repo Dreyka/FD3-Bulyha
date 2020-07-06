@@ -18,44 +18,35 @@ let Ishop2Block = React.createClass({
                 code: React.PropTypes.number.isRequired,
                 count: React.PropTypes.number.isRequired,
                 isDeleted: React.PropTypes.bool,
-                // cbDelElem: React.PropTypes.func.isRequired,
             })
         ),
+        cbDelElem: React.PropTypes.func.isRequired,
     },
     getInitialState: function () {
         return {
             isDeleted: this.props.products.isDeleted,
         };
     },
-    delProduct: function () {
+    delProduct: function (code) {
+        this.props.cbDelElem(code);
         this.setState({isDeleted: true});
-        console.log (this.state.isDeleted);
     },
-
-    f: function(code){
-        console.log(code)
-    },
-
     render: function () {
-
-        function createVDOM(v, i, a) {
-            return React.createElement(Ishop2Product, {key: v.code, name: v.name,
-                price: v.price,
-                URL_foto: v.URL_foto,
-                count: v.count,
-                cbDelProduct:this.f,
-                buttonText: v.buttonText,
-            });
-            // if (!v.isDeleted) {
-            //
-            // }
-            // ;
-        };
+        let prodactsCode = this.props.products.map(v => React.createElement(Ishop2Product, {
+            key: v.code, name: v.name,
+            price: v.price,
+            URL_foto: v.URL_foto,
+            count: v.count,
+            code: v.code,
+            isDeleted: v.isDeleted,
+            cbDelProduct: this.delProduct,
+            buttonText: v.buttonText,
+        }));
 
         return React.DOM.div({className: "Ishop2Block"},
-            React.DOM.div({className: "Ishop2BlockRow"}, this.props.head.map(v =>
+            React.DOM.div({className: "Ishop2BlockHeadRow"}, this.props.head.map(v =>
                 React.DOM.span({key: v.code, className: "Ishop2BlockCell"}, v.head))
-            ), this.props.products.map(createVDOM)
+            ), prodactsCode
         );
     },
 });

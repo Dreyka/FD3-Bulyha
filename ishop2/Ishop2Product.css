@@ -1,3 +1,18 @@
+.Ishop2BlockItemRow {
+  display: grid;
+  grid-template-columns: 20% 20% 25% 15% 20%;
+  grid-template-rows: auto;
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 30px;
+  padding: 0px 15px; }
 
+.Ishop2BlockItemRow[data="true"] {
+  background-color: #ff7f50;
+  transition: 0.5s; }
+
+.Ishop2BlockItemRow[data="false"] {
+  background-color: #ffffff;
+  transition: 0.5s; }
 
 /*# sourceMappingURL=Ishop2Product.css.map */

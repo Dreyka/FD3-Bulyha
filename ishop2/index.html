@@ -63,13 +63,13 @@
     for (let i = 0; i < ishopProducts.length; i++) {
         ishopProducts[i].code = i;
         ishopProducts[i].buttonText = "Delete";
-    };
+    }
+    ;
     for (let i = 0; i < ishopHead.length; i++) {
         ishopHead[i].code = i;
-    };
-    function delElem(code){
-        ishopProducts[code].isDeleted=true;
     }
+    ;
+    let delElem = code => ishopProducts[code].isDeleted = true;
 
     ReactDOM.render(
         React.createElement(Ishop2Block, {head: ishopHead, products: ishopProducts, cbDelElem: delElem}),
