@@ -17,9 +17,24 @@
 <script type="text/javascript" src="FilterBlock.js"></script>
 <link rel="stylesheet" type="text/css" href="FilterBlock.css">
 <script>
-
+    let randomStr = [
+        {text: "последовательность"},
+        {text: "фиксированным количеством"},
+        {text: "максимальную длину строки"},
+        {text: "два принципиально разных подхода"},
+        {text: "каждый момент времени"},
+        {text: "обработкой символов произвольной длины"},
+        {text: "долгое выполнение операций"},
+        {text: "отсутствие средств контроля"},
+        {text: "многие преимущества обоих подходов"},
+        {text: "строка является «чёрным ящиком»"},
+    ];
+    for (let i = 0; i < randomStr.length; i++) {
+        randomStr[i].code = i;
+    }
+    ;
     ReactDOM.render(
-        React.createElement(FilterBlock, {name: ishopName, products: ishopProducts}),
+        React.createElement(FilterBlock, {str: randomStr}),
         document.getElementById('Container')
     );
 </script>

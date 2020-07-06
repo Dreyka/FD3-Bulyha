@@ -1,6 +1,24 @@
-body{
+body {
   display: block;
 }
-.FilterBlock{
+
+.FilterBlock {
   display: block;
+  width: 30%;
+
+  > .FilterBlockOptions {
+
+  }
+
+  > .FilterBlockStr {
+    height: 100px;
+    overflow: auto;
+    padding: 10px 0px 0px 0px;
+    margin: 15px 0px 0px 0px;
+    border: solid 1px black;
+
+    > span {
+      display: block;
+    }
+  }
 }

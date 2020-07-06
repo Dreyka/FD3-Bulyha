@@ -2,6 +2,15 @@ body {
   display: block; }
 
 .FilterBlock {
-  display: block; }
+  display: block;
+  width: 30%; }
+  .FilterBlock > .FilterBlockStr {
+    height: 100px;
+    overflow: auto;
+    padding: 10px 0px 0px 0px;
+    margin: 15px 0px 0px 0px;
+    border: solid 1px black; }
+    .FilterBlock > .FilterBlockStr > span {
+      display: block; }
 
 /*# sourceMappingURL=FilterBlock.css.map */
