@@ -70,9 +70,22 @@
     }
     ;
     let delElem = code => ishopProducts[code].isDeleted = true;
-
+    let selectElem = function (code){
+        if (!(ishopProducts[code].isSelected === true)) {
+            ishopProducts.forEach(v => v.isSelected = false);
+            ishopProducts[code].isSelected = true;
+        } else {
+            ishopProducts[code].isSelected = false;
+        }
+        ;
+    };
     ReactDOM.render(
-        React.createElement(Ishop2Block, {head: ishopHead, products: ishopProducts, cbDelElem: delElem}),
+        React.createElement(Ishop2Block, {
+            head: ishopHead,
+            products: ishopProducts,
+            cbDelElem: delElem,
+            cbSelectElem: selectElem,
+        }),
         document.getElementById('Container')
     );
 </script>

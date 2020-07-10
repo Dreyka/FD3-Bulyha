@@ -9,13 +9,9 @@ let Ishop2Product = React.createClass({
         URL_foto: React.PropTypes.string.isRequired,
         count: React.PropTypes.number.isRequired,
         cbDelProduct: React.PropTypes.func.isRequired,
+        cbSelectProduct: React.PropTypes.func.isRequired,
         isDeleted: React.PropTypes.bool,
-    },
-
-    getInitialState: function () {
-        return {
-            isSelected: false,
-        };
+        isSelected: React.PropTypes.bool,
     },
 
     delButtonClicked: function (EO) {
@@ -25,16 +21,11 @@ let Ishop2Product = React.createClass({
         ;
     },
     selectRow: function (EO) {
-        if (!this.state.isSelected) {
-            this.setState({isSelected: true});
-        } else {
-            this.setState({isSelected: false});
-        }
-        ;
+        this.props.cbSelectProduct(this.props.code);
     },
     render: function () {
         return (!this.props.isDeleted)
-            ? React.DOM.div({className: "Ishop2BlockItemRow", data: this.state.isSelected, onClick: this.selectRow},
+            ? React.DOM.div({className: "Ishop2BlockItemRow", data: this.props.isSelected, onClick: this.selectRow},
                 React.DOM.span({className: "Name"}, this.props.name),
                 React.DOM.span({className: "Price"}, this.props.price),
                 React.DOM.span({className: "URL_foto"}, this.props.URL_foto),

@@ -18,18 +18,25 @@ let Ishop2Block = React.createClass({
                 code: React.PropTypes.number.isRequired,
                 count: React.PropTypes.number.isRequired,
                 isDeleted: React.PropTypes.bool,
+                isSelected: React.PropTypes.bool,
             })
         ),
         cbDelElem: React.PropTypes.func.isRequired,
+        cbSelectElem: React.PropTypes.func.isRequired,
     },
     getInitialState: function () {
         return {
             isDeleted: this.props.products.isDeleted,
+            isSelected: this.props.products.isSelected,
         };
     },
     delProduct: function (code) {
         this.props.cbDelElem(code);
         this.setState({isDeleted: true});
+    },
+    selectProduct: function (code) {
+        this.props.cbSelectElem(code);
+        this.setState({isSelected: true});
     },
     render: function () {
         let prodactsCode = this.props.products.map(v => React.createElement(Ishop2Product, {
@@ -39,7 +46,9 @@ let Ishop2Block = React.createClass({
             count: v.count,
             code: v.code,
             isDeleted: v.isDeleted,
+            isSelected: v.isSelected,
             cbDelProduct: this.delProduct,
+            cbSelectProduct: this.selectProduct,
             buttonText: v.buttonText,
         }));
 
