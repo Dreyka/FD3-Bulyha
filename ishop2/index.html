@@ -60,31 +60,11 @@
             count: 50
         },
     ];
-    // for (let i = 0; i < ishopProducts.length; i++) {
-    //     // ishopProducts[i].code = i;
-    //     // ishopProducts[i].buttonText = "Delete";
-    // }
-    // ;
-    for (let i = 0; i < ishopHead.length; i++) {
-        ishopHead[i].code = i;
-    }
-    ;
-    let delElem = code => ishopProducts[code].isDeleted = true;
-    let selectElem = function (code){
-        if (!(ishopProducts[code].isSelected === true)) {
-            ishopProducts.forEach(v => v.isSelected = false);
-            ishopProducts[code].isSelected = true;
-        } else {
-            ishopProducts[code].isSelected = false;
-        }
-        ;
-    };
+
     ReactDOM.render(
         React.createElement(Ishop2Block, {
             head: ishopHead,
             products: ishopProducts,
-            cbDelElem: delElem,
-            cbSelectElem: selectElem,
         }),
         document.getElementById('Container')
     );
