@@ -29255,7 +29255,8 @@ var Ishop3Block = function (_React$Component) {
             products: _this.props.products.slice(),
             isSelected: { mode: false, item: null },
             // В isSelected храним режим работы компонента (mode: true/false) и ссылку на выбранный продукт (item: link)
-            isEdited: { mode: false, item: null }
+            isEdited: { mode: false, item: null },
+            isEditedChange: false
         }, _this.delProduct = function (code) {
             for (var i = 0; i < _this.state.products.length; i++) {
                 if (_this.state.products[i].code === code) {
@@ -29270,6 +29271,8 @@ var Ishop3Block = function (_React$Component) {
             ;
             _this.setState({ products: _this.state.products });
         }, _this.selectProduct = function (code) {
+            if (_this.state.isEditedChange) return;
+            _this.state.isEdited = { mode: false, item: null };
             for (var i = 0; i < _this.state.products.length; i++) {
                 if (_this.state.products[i].code === code) {
                     if (!(_this.state.products[i].isSelected === true)) {
@@ -29288,24 +29291,47 @@ var Ishop3Block = function (_React$Component) {
             }
             ;
         }, _this.editProduct = function (code) {
+            if (_this.state.isEditedChange) return;
+
             for (var i = 0; i < _this.state.products.length; i++) {
                 if (_this.state.products[i].code === code) {
+                    console.log(_this.state.isEdited);
                     _this.setState({ isEdited: { mode: true, item: _this.state.products[i] } });
-                    // if (!(this.state.products[i].isSelected === true)) {
-                    //     this.state.products.forEach(v => v.isSelected = false);
-                    //     this.state.products[i].isSelected = true;
-                    //     this.setState({isSelected: {mode: true, item: this.state.products[i]}});
-                    // } else {
-                    //     this.state.products[i].isSelected = false;
-                    //     this.setState({isSelected: {mode: false, item: null}});
-                    // }
-                    // ;
                 }
                 ;
             }
             ;
+        }, _this.editChangedProduct = function (bool) {
+            _this.state.isEditedChange = bool;
+            console.log(_this.state.isEditedChange);
+        }, _this.editEndProduct = function (option, code, editedItem) {
+            _this.state.isEditedChange = false;
+            if (option === 0) {
+                // this.setState({isEdited: {mode: false, item: null}});
+                // this.state.isEditedChange=false;
+                _this.setState({ isEdited: { mode: false, item: null } });
+            }
+            ;
+            if (option === 1) {
+                for (var i = 0; i < _this.state.products.length; i++) {
+                    if (_this.state.products[i].code === code) {
+                        _this.state.products[i] = editedItem;
+                        // this.setState({isEdited: {mode: true, item: this.state.products[i]}});
+                        _this.setState({ isEdited: { mode: false, item: null } });
+                    }
+                    ;
+                }
+                ;
+                // this.setState({isEdited: {mode: false, item: null}});
+            }
+            ;
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
+
+    // editEndProduct:
+    // option=0 - изменения не внесены
+    // option=1 - изменения внесены
+
 
     _createClass(Ishop3Block, [{
         key: 'render',
@@ -29373,7 +29399,8 @@ var Ishop3Block = function (_React$Component) {
                 this.state.isEdited.mode ? _react2.default.createElement(_Ishop3Edit2.default, {
                     code: this.state.isEdited.item.code, name: this.state.isEdited.item.name,
                     price: this.state.isEdited.item.price, URL_foto: this.state.isEdited.item.URL_foto,
-                    count: this.state.isEdited.item.count
+                    count: this.state.isEdited.item.count, cbEditProduct: this.editEndProduct,
+                    cbEditChangedProduct: this.editChangedProduct
                 }) : null
             );
         }
@@ -30458,62 +30485,119 @@ var Ishop3Edit = function (_React$Component) {
             price: { value: _this.props.price, valid: true, change: false },
             URL_foto: { value: _this.props.URL_foto, valid: true, change: false },
             count: { value: _this.props.count, valid: true, change: false }
+        }, _this.changeControl = function () {
+            for (var k in _this.state) {
+                if (_this.state[k].change) {
+                    _this.props.cbEditChangedProduct(true);
+                    return;
+                }
+                ;
+            }
+            ;
+            _this.props.cbEditChangedProduct(false);
         }, _this.nameValid = function (EO) {
             if (EO.target.value === "") {
                 _this.state.name.valid = false;
             } else {
                 _this.state.name.valid = true;
-            };
+            }
+            ;
             if (!(EO.target.value === _this.props.name)) {
                 _this.state.name.change = true;
                 _this.state.name.value = EO.target.value;
             } else {
                 _this.state.name.change = false;
                 _this.state.name.value = EO.target.value;
-            };
-            _this.setState({ name: { value: _this.state.name.value, valid: _this.state.name.valid, change: _this.state.name.change } });
+            }
+            ;
+            _this.changeControl();
+            _this.setState({
+                name: {
+                    value: _this.state.name.value,
+                    valid: _this.state.name.valid,
+                    change: _this.state.name.change
+                }
+            });
         }, _this.priceValid = function (EO) {
             if (EO.target.value === "") {
                 _this.state.price.valid = false;
             } else {
                 _this.state.price.valid = true;
-            };
+            }
+            ;
             if (!(EO.target.value === _this.props.price)) {
                 _this.state.price.change = true;
                 _this.state.price.value = EO.target.value;
             } else {
                 _this.state.price.change = false;
                 _this.state.price.value = EO.target.value;
-            };
-            _this.setState({ price: { value: _this.state.price.value, valid: _this.state.price.valid, change: _this.state.price.change } });
+            }
+            ;
+            _this.changeControl();
+            _this.setState({
+                price: {
+                    value: _this.state.price.value,
+                    valid: _this.state.price.valid,
+                    change: _this.state.price.change
+                }
+            });
         }, _this.URL_fotoValid = function (EO) {
             if (EO.target.value === "") {
                 _this.state.URL_foto.valid = false;
             } else {
                 _this.state.URL_foto.valid = true;
-            };
+            }
+            ;
             if (!(EO.target.value === _this.props.URL_foto)) {
                 _this.state.URL_foto.change = true;
                 _this.state.URL_foto.value = EO.target.value;
             } else {
                 _this.state.URL_foto.change = false;
                 _this.state.URL_foto.value = EO.target.value;
-            };
-            _this.setState({ URL_foto: { value: _this.state.URL_foto.value, valid: _this.state.URL_foto.valid, change: _this.state.URL_foto.change } });
+            }
+            ;
+            _this.changeControl();
+            _this.setState({
+                URL_foto: {
+                    value: _this.state.URL_foto.value,
+                    valid: _this.state.URL_foto.valid,
+                    change: _this.state.URL_foto.change
+                }
+            });
         }, _this.countValid = function (EO) {
             if (EO.target.value === "") {
                 _this.state.count.valid = false;
             } else {
                 _this.state.count.valid = true;
-            };
+            }
+            ;
             if (!(EO.target.value === _this.props.price)) {
                 _this.state.count.change = true;
                 _this.state.count.value = EO.target.value;
             } else {
                 _this.state.count.change = false;
                 _this.state.count.value = EO.target.value;
+            }
+            ;
+            _this.changeControl();
+            _this.setState({
+                count: {
+                    value: _this.state.count.value,
+                    valid: _this.state.count.valid,
+                    change: _this.state.count.change
+                }
+            });
+        }, _this.save = function (EO) {
+            var newItem = {
+                name: _this.state.name.value,
+                price: _this.state.price.value,
+                URL_foto: _this.state.URL_foto.value,
+                count: _this.state.count.value,
+                code: _this.props.code
             };
-            _this.setState({ count: { value: _this.state.count.value, valid: _this.state.count.valid, change: _this.state.count.change } });
+            _this.props.cbEditProduct(1, _this.props.code, newItem);
+        }, _this.cancel = function (EO) {
+            _this.props.cbEditProduct(0);
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -30523,6 +30607,7 @@ var Ishop3Edit = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
+                console.log(this.props),
                 _react2.default.createElement(
                     'span',
                     { className: 'caption' },
@@ -30542,7 +30627,7 @@ var Ishop3Edit = function (_React$Component) {
                         null,
                         'Name'
                     ),
-                    _react2.default.createElement('input', { type: 'text', defaultValue: this.state.name.value, onBlur: this.nameValid }),
+                    _react2.default.createElement('input', { type: 'text', defaultValue: this.props.name, onBlur: this.nameValid }),
                     !this.state.name.valid ? _react2.default.createElement(
                         'span',
                         { className: 'Warning' },
@@ -30555,9 +30640,9 @@ var Ishop3Edit = function (_React$Component) {
                     _react2.default.createElement(
                         'span',
                         null,
-                        'Name'
+                        'Price'
                     ),
-                    _react2.default.createElement('input', { type: 'text', defaultValue: this.state.price.value, onBlur: this.priceValid }),
+                    _react2.default.createElement('input', { type: 'text', defaultValue: this.props.price, onBlur: this.priceValid }),
                     !this.state.price.valid ? _react2.default.createElement(
                         'span',
                         { className: 'Warning' },
@@ -30570,9 +30655,9 @@ var Ishop3Edit = function (_React$Component) {
                     _react2.default.createElement(
                         'span',
                         null,
-                        'Name'
+                        'URL'
                     ),
-                    _react2.default.createElement('input', { type: 'text', defaultValue: this.state.URL_foto.value, onBlur: this.URL_fotoValid }),
+                    _react2.default.createElement('input', { type: 'text', defaultValue: this.props.URL_foto, onBlur: this.URL_fotoValid }),
                     !this.state.URL_foto.valid ? _react2.default.createElement(
                         'span',
                         { className: 'Warning' },
@@ -30585,14 +30670,26 @@ var Ishop3Edit = function (_React$Component) {
                     _react2.default.createElement(
                         'span',
                         null,
-                        'Name'
+                        'Quantity'
                     ),
-                    _react2.default.createElement('input', { type: 'text', defaultValue: this.state.count.value, onBlur: this.countValid }),
+                    _react2.default.createElement('input', { type: 'text', defaultValue: this.props.count, onBlur: this.countValid }),
                     !this.state.count.valid ? _react2.default.createElement(
                         'span',
                         { className: 'Warning' },
                         'Please, fill the field'
                     ) : null
+                ),
+                _react2.default.createElement(
+                    'button',
+                    {
+                        disabled: !this.state.price.valid || !this.state.URL_foto.valid || !this.state.count.valid || !this.state.name.valid,
+                        onClick: this.save },
+                    'Save'
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: this.cancel },
+                    'Cancel'
                 )
             );
         }
@@ -30606,9 +30703,9 @@ Ishop3Edit.propTypes = {
     price: _propTypes2.default.string.isRequired,
     URL_foto: _propTypes2.default.string.isRequired,
     count: _propTypes2.default.number.isRequired,
-    code: _propTypes2.default.number.isRequired
-    // cbDelProduct: PropTypes.func.isRequired,
-    // cbSelectProduct: PropTypes.func.isRequired,
+    code: _propTypes2.default.number.isRequired,
+    cbEditProduct: _propTypes2.default.func.isRequired,
+    cbEditChangedProduct: _propTypes2.default.func.isRequired
     // cbEditProduct: PropTypes.func.isRequired,
     // isSelected: PropTypes.bool,
 };
