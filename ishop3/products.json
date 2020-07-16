@@ -1,0 +1,26 @@
+[
+  {
+    "name": "apple",
+    "price": "5$",
+    "URL_foto": "img",
+    "count": 100
+  },
+  {
+    "name": "lime",
+    "price": "15$",
+    "URL_foto": "img",
+    "count": 30
+  },
+  {
+    "name": "pineapple",
+    "price": "30$",
+    "URL_foto": "img",
+    "count": 50
+  },
+  {
+    "name": "pear",
+    "price": "30$",
+    "URL_foto": "img",
+    "count": 50
+  }
+]

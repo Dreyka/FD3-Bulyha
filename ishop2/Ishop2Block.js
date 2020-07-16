@@ -15,38 +15,40 @@ let Ishop2Block = React.createClass({
                 price: React.PropTypes.string.isRequired,
                 URL_foto: React.PropTypes.string.isRequired,
                 count: React.PropTypes.number.isRequired,
+                code: React.PropTypes.number.isRequired,
             })
         ),
     },
     getInitialState: function () {
-        let initProducts = this.props.products.slice();
-        this.codeProducts(initProducts);
-        let initHead = this.props.head.slice();
-        this.codeProducts(initHead);
         return {
-            head: initHead,
-            products: initProducts,
-            isDeleted: false,
+            head: this.props.head.slice(),
+            products: this.props.products.slice(),
             isSelected: false,
         };
     },
-    codeProducts: function (arr) {
-        for (let i = 0; i < arr.length; i++) {
-            arr[i].code = i;
+
+    delProduct: function (code) {
+        for (let i = 0; i < this.state.products.length; i++) {
+            if (this.state.products[i].code === code) {
+                this.state.products.splice(i, 1);
+            }
+            ;
         }
         ;
-    },
-    delProduct: function (code) {
-        this.state.products.splice(code,1);
-        this.codeProducts(this.state.products);
-        this.setState({isDeleted: true});
+        this.setState({products: this.state.products});
     },
     selectProduct: function (code) {
-        if (!(this.state.products[code].isSelected === true)) {
-            this.state.products.forEach(v => v.isSelected = false);
-            this.state.products[code].isSelected = true;
-        } else {
-            this.state.products[code].isSelected = false;
+        for (let i = 0; i < this.state.products.length; i++) {
+            if (this.state.products[i].code === code) {
+                if (!(this.state.products[i].isSelected === true)) {
+                    this.state.products.forEach(v => v.isSelected = false);
+                    this.state.products[i].isSelected = true;
+                } else {
+                    this.state.products[i].isSelected = false;
+                }
+                ;
+            }
+            ;
         }
         ;
         this.setState({isSelected: true});

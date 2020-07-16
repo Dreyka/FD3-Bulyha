@@ -1,0 +1,21 @@
+.Ishop2BlockItemRow {
+  display: grid;
+  grid-template-columns: 15% 15% 25% 15% 30%;
+  grid-template-rows: auto;
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 30px;
+  padding: 0px 15px;
+  > .ButtonsControl{
+
+  }
+}
+
+.Ishop2BlockItemRow[data-select="true"] {
+  background-color: #ff7f50;
+  transition: 0.5s;
+}
+.Ishop2BlockItemRow[data-select="false"] {
+  background-color: #ffffff;
+  transition: 0.5s;
+}
