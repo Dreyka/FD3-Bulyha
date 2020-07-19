@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './Ishop3Edit.css';
+import './Ishop3Add.css';
 
-class Ishop3Edit extends React.Component {
+class Ishop3Add extends React.Component {
     static propTypes = {
-        name: PropTypes.string.isRequired,
-        price: PropTypes.string.isRequired,
-        URL_foto: PropTypes.string.isRequired,
-        count: PropTypes.number.isRequired,
+        // name: PropTypes.string.isRequired,
+        // price: PropTypes.string.isRequired,
+        // URL_foto: PropTypes.string.isRequired,
+        // count: PropTypes.number.isRequired,
         code: PropTypes.number.isRequired,
-        cbEditProduct: PropTypes.func.isRequired,
-        cbEditChangedProduct: PropTypes.func.isRequired,
+        // cbEditProduct: PropTypes.func.isRequired,
+        // cbEditChangedProduct: PropTypes.func.isRequired,
     };
 
     state = {
@@ -130,7 +130,7 @@ class Ishop3Edit extends React.Component {
         })
     };
 
-    save = (EO) => {
+    add = (EO) => {
         let newItem = {
             name: this.state.name.value,
             price: this.state.price.value,
@@ -153,35 +153,35 @@ class Ishop3Edit extends React.Component {
                 <span>ID:{this.props.code}</span>
                 <div className='item'>
                     <span>Name</span>
-                    <input type='text' defaultValue={this.props.name} onBlur={this.nameValid}/>
+                    <input type='text' onBlur={this.nameValid}/>
                     {(!this.state.name.valid)
                         ? <span className='Warning'>Please, fill the field</span>
                         : null}
                 </div>
                 <div className='item'>
                     <span>Price</span>
-                    <input type='text' defaultValue={this.props.price} onBlur={this.priceValid}/>
+                    <input type='text' onBlur={this.priceValid}/>
                     {(!this.state.price.valid)
                         ? <span className='Warning'>Please, fill the field</span>
                         : null}
                 </div>
                 <div className='item'>
                     <span>URL</span>
-                    <input type='text' defaultValue={this.props.URL_foto} onBlur={this.URL_fotoValid}/>
+                    <input type='text' onBlur={this.URL_fotoValid}/>
                     {(!this.state.URL_foto.valid)
                         ? <span className='Warning'>Please, fill the field</span>
                         : null}
                 </div>
                 <div className='item'>
                     <span>Quantity</span>
-                    <input type='text' defaultValue={this.props.count} onBlur={this.countValid}/>
+                    <input type='text' onBlur={this.countValid}/>
                     {(!this.state.count.valid)
                         ? <span className='Warning'>Please, fill the field</span>
                         : null}
                 </div>
                 <button
                     disabled={!this.state.price.valid || !this.state.URL_foto.valid || !this.state.count.valid || !this.state.name.valid}
-                    onClick={this.save}>Save
+                    onClick={this.add}>Add
                 </button>
                 {/*<button disabled={!this.state.name.valid}>Save</button>*/}
                 <button onClick={this.cancel}>Cancel</button>
@@ -190,4 +190,4 @@ class Ishop3Edit extends React.Component {
     }
 };
 
-export default Ishop3Edit;
+export default Ishop3Add;

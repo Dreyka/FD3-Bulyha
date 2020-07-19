@@ -5,6 +5,7 @@ import './Ishop3Block.css';
 
 import Ishop3Product from './Ishop3Product';
 import Ishop3Edit from './Ishop3Edit';
+import Ishop3Add from './Ishop3Add';
 
 class Ishop3Block extends React.Component {
 
@@ -33,6 +34,7 @@ class Ishop3Block extends React.Component {
         // В isSelected храним режим работы компонента (mode: true/false) и ссылку на выбранный продукт (item: link)
         isEdited: {mode: false, item: null},
         isEditedChange: false,
+        isNewProduct: false,
     };
 
     delProduct = (code) => {
@@ -51,7 +53,7 @@ class Ishop3Block extends React.Component {
     };
 
     selectProduct = (code) => {
-        if (this.state.isEditedChange) return;
+        if (this.state.isEditedChange||this.state.isNewProduct) return;
         this.state.isEdited = {mode: false, item: null};
         for (let i = 0; i < this.state.products.length; i++) {
             if (this.state.products[i].code === code) {
@@ -72,10 +74,11 @@ class Ishop3Block extends React.Component {
 
     editProduct = (code) => {
         if (this.state.isEditedChange) return;
-
+        this.state.products.forEach(v => v.isSelected = false);
         for (let i = 0; i < this.state.products.length; i++) {
             if (this.state.products[i].code === code) {
                 console.log(this.state.isEdited)
+                this.state.products[i].isSelected = true;
                 this.setState({isEdited: {mode: true, item: this.state.products[i]}});
             }
             ;
@@ -92,9 +95,8 @@ class Ishop3Block extends React.Component {
     // option=1 - изменения внесены
     editEndProduct = (option, code, editedItem) => {
         this.state.isEditedChange = false;
+        this.state.products.forEach(v => v.isSelected = false);
         if (option === 0) {
-            // this.setState({isEdited: {mode: false, item: null}});
-            // this.state.isEditedChange=false;
             this.setState({isEdited: {mode: false, item: null}});
         }
         ;
@@ -102,29 +104,26 @@ class Ishop3Block extends React.Component {
             for (let i = 0; i < this.state.products.length; i++) {
                 if (this.state.products[i].code === code) {
                     this.state.products[i] = editedItem;
-                    // this.setState({isEdited: {mode: true, item: this.state.products[i]}});
                     this.setState({isEdited: {mode: false, item: null}});
                 }
                 ;
             }
             ;
-            // this.setState({isEdited: {mode: false, item: null}});
         }
         ;
+    };
+
+    addNewProduct=()=>{
+        this.setState({isNewProduct:true});
     };
 
     render() {
         let productsCode = this.state.products.map(v =>
             <Ishop3Product
                 key={v.code} name={v.name} price={v.price} URL_foto={v.URL_foto} count={v.count} code={v.code}
-                isSelected={v.isSelected} cbDelProduct={this.delProduct} cbSelectProduct={this.selectProduct}
-                cbEditProduct={this.editProduct}
+                isSelected={v.isSelected} isEdited={this.state.isEdited.mode} isNewProduct={this.state.isNewProduct}
+                cbDelProduct={this.delProduct} cbSelectProduct={this.selectProduct} cbEditProduct={this.editProduct}
             />);
-        // let productsEdit = <Ishop3Edit
-        //     code={this.state.isEdited.item.code} name={this.state.isEdited.item.name}
-        //     price={this.state.isEdited.item.price} URL_foto={this.state.isEdited.item.URL_foto}
-        //     count={this.state.isEdited.item.count}
-        // />;
 
         return (
             <Fragment>
@@ -141,7 +140,9 @@ class Ishop3Block extends React.Component {
                     {/*Тело таблицы*/}
                     {productsCode}
                 </div>
-                <button className='Ishop3BlockButNew'>New product</button>
+                <button className='Ishop3BlockButNew' disabled={this.state.isEdited.mode || this.state.isNewProduct} onClick={this.addNewProduct}>
+                    New product
+                </button>
 
                 {/*Карточка товара*/}
                 {(this.state.isSelected.mode && !this.state.isEdited.mode)
@@ -159,6 +160,16 @@ class Ishop3Block extends React.Component {
                         price={this.state.isEdited.item.price} URL_foto={this.state.isEdited.item.URL_foto}
                         count={this.state.isEdited.item.count} cbEditProduct={this.editEndProduct}
                         cbEditChangedProduct={this.editChangedProduct}
+                    />
+                    : null}
+                {/*Режим добавления нового продукта*/}
+                {(this.state.isNewProduct)
+                    ? <Ishop3Add
+                        code={this.state.products[this.state.products.length-1].code+1}
+                        // code={this.state.isEdited.item.code} name={this.state.isEdited.item.name}
+                        // price={this.state.isEdited.item.price} URL_foto={this.state.isEdited.item.URL_foto}
+                        // count={this.state.isEdited.item.count} cbEditProduct={this.editEndProduct}
+                        // cbEditChangedProduct={this.editChangedProduct}
                     />
                     : null}
             </Fragment>

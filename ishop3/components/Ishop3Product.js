@@ -14,6 +14,8 @@ class Ishop3Product extends React.Component {
         cbSelectProduct: PropTypes.func.isRequired,
         cbEditProduct: PropTypes.func.isRequired,
         isSelected: PropTypes.bool,
+        isEdited: PropTypes.bool,
+        isNewProduct: PropTypes.bool,
     };
     delButtonClicked = (EO) => {
         EO.stopPropagation();
@@ -25,20 +27,28 @@ class Ishop3Product extends React.Component {
     selectRow = (EO) => {
         this.props.cbSelectProduct(this.props.code);
     };
-    editButtonClicked = (EO)=>{
+    editButtonClicked = (EO) => {
+        EO.stopPropagation();
         this.props.cbEditProduct(this.props.code);
     };
+
     render() {
 
-        return(
-            <div className='Ishop2BlockItemRow' data-select={(this.props.isSelected===undefined)?"false":this.props.isSelected.toString()} onClick={this.selectRow}>
+        return (
+            <div className='Ishop2BlockItemRow'
+                 data-select={(this.props.isSelected === undefined) ? "false" : this.props.isSelected.toString()}
+                 onClick={this.selectRow}>
                 <span className='Name'>{this.props.name}</span>
                 <span className='Price'>{this.props.price}</span>
                 <span className='URL_foto'>{this.props.URL_foto}</span>
                 <span className='Count'>{this.props.count}</span>
-                <div  className='ButtonsControl'>
-                    <button className='ButtonEdit' onClick={this.editButtonClicked}>Edit</button>
-                    <button className='ButtonDel' onClick={this.delButtonClicked}>Delete</button>
+                <div className='ButtonsControl'>
+                    <button className='ButtonEdit' onClick={this.editButtonClicked}
+                            disabled={this.props.isNewProduct}>Edit
+                    </button>
+                    <button className='ButtonDel' onClick={this.delButtonClicked}
+                            disabled={this.props.isEdited || this.props.isNewProduct}>Delete
+                    </button>
                 </div>
             </div>
         )
