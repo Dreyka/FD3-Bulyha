@@ -369,6 +369,32 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (process.env.NODE_ENV !== 'production') {
+  var ReactIs = __webpack_require__(7);
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(22)(ReactIs.isElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = __webpack_require__(23)();
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -382,7 +408,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 var printWarning = function() {};
 
 if (process.env.NODE_ENV !== 'production') {
-  var ReactPropTypesSecret = __webpack_require__(4);
+  var ReactPropTypesSecret = __webpack_require__(5);
   var loggedTypeFailures = {};
   var has = Function.call.bind(Object.prototype.hasOwnProperty);
 
@@ -476,7 +502,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -493,32 +519,6 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (process.env.NODE_ENV !== 'production') {
-  var ReactIs = __webpack_require__(7);
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(22)(ReactIs.isElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(23)();
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 6 */
@@ -582,7 +582,7 @@ var ishopHead = [{
 }, {
     head: "Control"
 }];
-var ishopProducts = __webpack_require__(29);
+var ishopProducts = __webpack_require__(31);
 
 for (var i = 0; i < ishopHead.length; i++) {
     ishopHead[i].code = i;
@@ -652,7 +652,7 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var _assign = __webpack_require__(2);
-var checkPropTypes = __webpack_require__(3);
+var checkPropTypes = __webpack_require__(4);
 
 var ReactVersion = '16.13.1';
 
@@ -3813,7 +3813,7 @@ if (process.env.NODE_ENV !== "production") {
 var React = __webpack_require__(1);
 var _assign = __webpack_require__(2);
 var Scheduler = __webpack_require__(6);
-var checkPropTypes = __webpack_require__(3);
+var checkPropTypes = __webpack_require__(4);
 var tracing = __webpack_require__(16);
 
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // Prevent newer renderers from RTE when used with older react package versions.
@@ -29214,7 +29214,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -29227,6 +29227,10 @@ var _Ishop3Product2 = _interopRequireDefault(_Ishop3Product);
 var _Ishop3Edit = __webpack_require__(27);
 
 var _Ishop3Edit2 = _interopRequireDefault(_Ishop3Edit);
+
+var _Ishop3Add = __webpack_require__(29);
+
+var _Ishop3Add2 = _interopRequireDefault(_Ishop3Add);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29253,84 +29257,77 @@ var Ishop3Block = function (_React$Component) {
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Ishop3Block.__proto__ || Object.getPrototypeOf(Ishop3Block)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
             head: _this.props.head.slice(),
             products: _this.props.products.slice(),
-            isSelected: { mode: false, item: null },
-            // В isSelected храним режим работы компонента (mode: true/false) и ссылку на выбранный продукт (item: link)
-            isEdited: { mode: false, item: null },
-            isEditedChange: false
+
+            // В isSelected храним:
+            // mode - режим работы карточки товара (true-показываем, false-скрываем)
+            // code - код товара выделенного цветом
+            isSelected: { mode: false, code: -1 },
+
+            // В isEdited храним:
+            // change - внесены ли изменения в наш товар (true-изменения внесены, false-изменений нет)
+            // code - код товара который редактируем
+            isEdited: { change: false, code: -1 },
+
+            isNewProduct: false
         }, _this.delProduct = function (code) {
-            for (var i = 0; i < _this.state.products.length; i++) {
-                if (_this.state.products[i].code === code) {
-                    if (_this.state.products[i] === _this.state.isSelected.item) {
-                        _this.state.isSelected.item = null;
-                        _this.state.isSelected.mode = false;
-                    }
-                    _this.state.products.splice(i, 1);
-                }
-                ;
-            }
-            ;
-            _this.setState({ products: _this.state.products });
+            _this.setState({
+                products: _this.state.products.filter(function (v) {
+                    return v.code != code;
+                }),
+                isSelected: code === _this.state.isSelected.code ? { mode: false, code: -1 } : _this.state.isSelected
+            });
         }, _this.selectProduct = function (code) {
-            if (_this.state.isEditedChange) return;
-            _this.state.isEdited = { mode: false, item: null };
-            for (var i = 0; i < _this.state.products.length; i++) {
-                if (_this.state.products[i].code === code) {
-                    if (!(_this.state.products[i].isSelected === true)) {
-                        _this.state.products.forEach(function (v) {
-                            return v.isSelected = false;
-                        });
-                        _this.state.products[i].isSelected = true;
-                        _this.setState({ isSelected: { mode: true, item: _this.state.products[i] } });
-                    } else {
-                        _this.state.products[i].isSelected = false;
-                        _this.setState({ isSelected: { mode: false, item: null } });
-                    }
-                    ;
-                }
-                ;
+            if (_this.state.isEdited.change || _this.state.isNewProduct) return;
+
+            if (_this.state.isSelected.code === code) {
+                _this.setState({ isSelected: { mode: false, code: -1 }, isEdited: { change: false, code: -1 } });
+            } else {
+                _this.setState({ isSelected: { mode: true, code: code }, isEdited: { change: false, code: -1 } });
             }
             ;
         }, _this.editProduct = function (code) {
-            if (_this.state.isEditedChange) return;
-
-            for (var i = 0; i < _this.state.products.length; i++) {
-                if (_this.state.products[i].code === code) {
-                    console.log(_this.state.isEdited);
-                    _this.setState({ isEdited: { mode: true, item: _this.state.products[i] } });
-                }
-                ;
-            }
-            ;
+            if (_this.state.isEdited.change) return;
+            _this.setState({ isEdited: { change: false, code: code }, isSelected: { mode: false, code: code } });
         }, _this.editChangedProduct = function (bool) {
-            _this.state.isEditedChange = bool;
-            console.log(_this.state.isEditedChange);
+            _this.state.isEdited.change = bool;
         }, _this.editEndProduct = function (option, code, editedItem) {
-            _this.state.isEditedChange = false;
-            if (option === 0) {
-                // this.setState({isEdited: {mode: false, item: null}});
-                // this.state.isEditedChange=false;
-                _this.setState({ isEdited: { mode: false, item: null } });
-            }
-            ;
+            // this.state;
             if (option === 1) {
                 for (var i = 0; i < _this.state.products.length; i++) {
                     if (_this.state.products[i].code === code) {
                         _this.state.products[i] = editedItem;
-                        // this.setState({isEdited: {mode: true, item: this.state.products[i]}});
-                        _this.setState({ isEdited: { mode: false, item: null } });
                     }
                     ;
                 }
                 ;
-                // this.setState({isEdited: {mode: false, item: null}});
             }
             ;
+            _this.setState({ isEdited: { change: false, code: -1 }, isSelected: { mode: false, code: -1 } });
+        }, _this.addNewProduct = function (EO) {
+            _this.setState({ isNewProduct: true, isSelected: { mode: false, code: -1 } });
+        }, _this.addEndNewProduct = function (option, newItem) {
+            if (option === 1) _this.state.products.push(newItem);
+            _this.setState({ isNewProduct: false });
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    // editEndProduct:
-    // option=0 - изменения не внесены
+    // Удалить товар
+
+
+    // Выделить товар
+
+
+    // Изменить товар
+
+
+    // Контролируем изменения (true-изменения были внесены, false-изменений нет)
+
+
+    // editEndProduct сохраняем изменения:
     // option=1 - изменения внесены
+
+
+    // Добавить новый товар
 
 
     _createClass(Ishop3Block, [{
@@ -29341,15 +29338,53 @@ var Ishop3Block = function (_React$Component) {
             var productsCode = this.state.products.map(function (v) {
                 return _react2.default.createElement(_Ishop3Product2.default, {
                     key: v.code, name: v.name, price: v.price, URL_foto: v.URL_foto, count: v.count, code: v.code,
-                    isSelected: v.isSelected, cbDelProduct: _this2.delProduct, cbSelectProduct: _this2.selectProduct,
-                    cbEditProduct: _this2.editProduct
+                    isSelected: v.code === _this2.state.isSelected.code ? true : false,
+                    isEdited: _this2.state.isEdited.code != -1 ? true : false,
+                    isNewProduct: _this2.state.isNewProduct,
+                    cbDelProduct: _this2.delProduct, cbSelectProduct: _this2.selectProduct, cbEditProduct: _this2.editProduct
                 });
             });
-            // let productsEdit = <Ishop3Edit
-            //     code={this.state.isEdited.item.code} name={this.state.isEdited.item.name}
-            //     price={this.state.isEdited.item.price} URL_foto={this.state.isEdited.item.URL_foto}
-            //     count={this.state.isEdited.item.count}
-            // />;
+
+            var selectVDOM = this.state.products.filter(function (v) {
+                return v.code === _this2.state.isSelected.code;
+            }).map(function (v) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'Ishop3BlockProductSelected', key: v.code },
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'caption' },
+                        v.name
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Price: ',
+                        v.price
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'URL: ',
+                        v.URL_foto
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Quantity: ',
+                        v.count
+                    )
+                );
+            });
+
+            var editVDOM = this.state.products.filter(function (v) {
+                return v.code === _this2.state.isSelected.code;
+            }).map(function (v) {
+                return _react2.default.createElement(_Ishop3Edit2.default, {
+                    key: v.code, code: v.code, name: v.name, price: v.price, URL_foto: v.URL_foto, count: v.count,
+                    cbEditProduct: _this2.editEndProduct, cbEditChangedProduct: _this2.editChangedProduct
+                });
+            });
 
             return _react2.default.createElement(
                 _react.Fragment,
@@ -29372,35 +29407,16 @@ var Ishop3Block = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     'button',
-                    { className: 'Ishop3BlockButNew' },
+                    { className: 'Ishop3BlockButNew',
+                        disabled: this.state.isEdited.code != -1 || this.state.isNewProduct,
+                        onClick: this.addNewProduct },
                     'New product'
                 ),
-                this.state.isSelected.mode && !this.state.isEdited.mode ? _react2.default.createElement(
-                    'div',
-                    { className: 'Ishop3BlockProductSelected' },
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        this.state.isSelected.item.name
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        'Price: ',
-                        this.state.isSelected.item.price
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        'URL: ',
-                        this.state.isSelected.item.URL_foto
-                    )
-                ) : null,
-                this.state.isEdited.mode ? _react2.default.createElement(_Ishop3Edit2.default, {
-                    code: this.state.isEdited.item.code, name: this.state.isEdited.item.name,
-                    price: this.state.isEdited.item.price, URL_foto: this.state.isEdited.item.URL_foto,
-                    count: this.state.isEdited.item.count, cbEditProduct: this.editEndProduct,
-                    cbEditChangedProduct: this.editChangedProduct
+                this.state.isSelected.mode && !this.state.isEdited.mode ? selectVDOM : null,
+                this.state.isEdited.code != -1 ? editVDOM : null,
+                this.state.isNewProduct ? _react2.default.createElement(_Ishop3Add2.default, {
+                    code: this.state.products[this.state.products.length - 1].code + 1,
+                    cbAddEndNewProduct: this.addEndNewProduct
                 }) : null
             );
         }
@@ -29652,8 +29668,8 @@ exports.typeOf = typeOf;
 var ReactIs = __webpack_require__(7);
 var assign = __webpack_require__(2);
 
-var ReactPropTypesSecret = __webpack_require__(4);
-var checkPropTypes = __webpack_require__(3);
+var ReactPropTypesSecret = __webpack_require__(5);
+var checkPropTypes = __webpack_require__(4);
 
 var has = Function.call.bind(Object.prototype.hasOwnProperty);
 var printWarning = function() {};
@@ -30248,7 +30264,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 
-var ReactPropTypesSecret = __webpack_require__(4);
+var ReactPropTypesSecret = __webpack_require__(5);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -30328,7 +30344,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -30365,6 +30381,7 @@ var Ishop3Product = function (_React$Component) {
         }, _this.selectRow = function (EO) {
             _this.props.cbSelectProduct(_this.props.code);
         }, _this.editButtonClicked = function (EO) {
+            EO.stopPropagation();
             _this.props.cbEditProduct(_this.props.code);
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -30375,7 +30392,9 @@ var Ishop3Product = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'Ishop2BlockItemRow', 'data-select': this.props.isSelected === undefined ? "false" : this.props.isSelected.toString(), onClick: this.selectRow },
+                { className: 'Ishop2BlockItemRow',
+                    'data-select': this.props.isSelected === undefined ? "false" : this.props.isSelected.toString(),
+                    onClick: this.selectRow },
                 _react2.default.createElement(
                     'span',
                     { className: 'Name' },
@@ -30401,12 +30420,14 @@ var Ishop3Product = function (_React$Component) {
                     { className: 'ButtonsControl' },
                     _react2.default.createElement(
                         'button',
-                        { className: 'ButtonEdit', onClick: this.editButtonClicked },
+                        { className: 'ButtonEdit', onClick: this.editButtonClicked,
+                            disabled: this.props.isNewProduct },
                         'Edit'
                     ),
                     _react2.default.createElement(
                         'button',
-                        { className: 'ButtonDel', onClick: this.delButtonClicked },
+                        { className: 'ButtonDel', onClick: this.delButtonClicked,
+                            disabled: this.props.isEdited || this.props.isNewProduct },
                         'Delete'
                     )
                 )
@@ -30425,7 +30446,9 @@ Ishop3Product.propTypes = {
     cbDelProduct: _propTypes2.default.func.isRequired,
     cbSelectProduct: _propTypes2.default.func.isRequired,
     cbEditProduct: _propTypes2.default.func.isRequired,
-    isSelected: _propTypes2.default.bool
+    isSelected: _propTypes2.default.bool,
+    isEdited: _propTypes2.default.bool,
+    isNewProduct: _propTypes2.default.bool
 };
 exports.default = Ishop3Product;
 
@@ -30452,7 +30475,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(5);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -30496,97 +30519,37 @@ var Ishop3Edit = function (_React$Component) {
             ;
             _this.props.cbEditChangedProduct(false);
         }, _this.nameValid = function (EO) {
-            if (EO.target.value === "") {
-                _this.state.name.valid = false;
-            } else {
-                _this.state.name.valid = true;
-            }
-            ;
-            if (!(EO.target.value === _this.props.name)) {
-                _this.state.name.change = true;
-                _this.state.name.value = EO.target.value;
-            } else {
-                _this.state.name.change = false;
-                _this.state.name.value = EO.target.value;
-            }
-            ;
-            _this.changeControl();
             _this.setState({
                 name: {
-                    value: _this.state.name.value,
-                    valid: _this.state.name.valid,
-                    change: _this.state.name.change
+                    value: !(EO.target.value === _this.props.name) ? EO.target.value : _this.state.name.value,
+                    valid: EO.target.value !== "",
+                    change: !(EO.target.value === _this.props.name)
                 }
-            });
+            }, _this.changeControl);
         }, _this.priceValid = function (EO) {
-            if (EO.target.value === "") {
-                _this.state.price.valid = false;
-            } else {
-                _this.state.price.valid = true;
-            }
-            ;
-            if (!(EO.target.value === _this.props.price)) {
-                _this.state.price.change = true;
-                _this.state.price.value = EO.target.value;
-            } else {
-                _this.state.price.change = false;
-                _this.state.price.value = EO.target.value;
-            }
-            ;
-            _this.changeControl();
             _this.setState({
                 price: {
-                    value: _this.state.price.value,
-                    valid: _this.state.price.valid,
-                    change: _this.state.price.change
+                    value: !(EO.target.value === _this.props.price) ? EO.target.value : _this.state.price.value,
+                    valid: EO.target.value !== "",
+                    change: !(EO.target.value === _this.props.price)
                 }
-            });
+            }, _this.changeControl);
         }, _this.URL_fotoValid = function (EO) {
-            if (EO.target.value === "") {
-                _this.state.URL_foto.valid = false;
-            } else {
-                _this.state.URL_foto.valid = true;
-            }
-            ;
-            if (!(EO.target.value === _this.props.URL_foto)) {
-                _this.state.URL_foto.change = true;
-                _this.state.URL_foto.value = EO.target.value;
-            } else {
-                _this.state.URL_foto.change = false;
-                _this.state.URL_foto.value = EO.target.value;
-            }
-            ;
-            _this.changeControl();
             _this.setState({
                 URL_foto: {
-                    value: _this.state.URL_foto.value,
-                    valid: _this.state.URL_foto.valid,
-                    change: _this.state.URL_foto.change
+                    value: !(EO.target.value === _this.props.URL_foto) ? EO.target.value : _this.state.URL_foto.value,
+                    valid: EO.target.value !== "",
+                    change: !(EO.target.value === _this.props.URL_foto)
                 }
-            });
+            }, _this.changeControl);
         }, _this.countValid = function (EO) {
-            if (EO.target.value === "") {
-                _this.state.count.valid = false;
-            } else {
-                _this.state.count.valid = true;
-            }
-            ;
-            if (!(EO.target.value === _this.props.price)) {
-                _this.state.count.change = true;
-                _this.state.count.value = EO.target.value;
-            } else {
-                _this.state.count.change = false;
-                _this.state.count.value = EO.target.value;
-            }
-            ;
-            _this.changeControl();
             _this.setState({
                 count: {
-                    value: _this.state.count.value,
-                    valid: _this.state.count.valid,
-                    change: _this.state.count.change
+                    value: !(EO.target.value === _this.props.count) ? Number(EO.target.value) : _this.state.count.value,
+                    valid: EO.target.value !== "" && Number(EO.target.value),
+                    change: !(Number(EO.target.value) === _this.props.count)
                 }
-            });
+            }, _this.changeControl);
         }, _this.save = function (EO) {
             var newItem = {
                 name: _this.state.name.value,
@@ -30597,7 +30560,7 @@ var Ishop3Edit = function (_React$Component) {
             };
             _this.props.cbEditProduct(1, _this.props.code, newItem);
         }, _this.cancel = function (EO) {
-            _this.props.cbEditProduct(0);
+            _this.props.cbEditProduct();
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -30606,8 +30569,7 @@ var Ishop3Edit = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
-                console.log(this.props),
+                { className: 'Ishop3BlockEdit' },
                 _react2.default.createElement(
                     'span',
                     { className: 'caption' },
@@ -30706,8 +30668,6 @@ Ishop3Edit.propTypes = {
     code: _propTypes2.default.number.isRequired,
     cbEditProduct: _propTypes2.default.func.isRequired,
     cbEditChangedProduct: _propTypes2.default.func.isRequired
-    // cbEditProduct: PropTypes.func.isRequired,
-    // isSelected: PropTypes.bool,
 };
 ;
 
@@ -30721,6 +30681,224 @@ exports.default = Ishop3Edit;
 
 /***/ }),
 /* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+__webpack_require__(30);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Ishop3Add = function (_React$Component) {
+    _inherits(Ishop3Add, _React$Component);
+
+    function Ishop3Add() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, Ishop3Add);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Ishop3Add.__proto__ || Object.getPrototypeOf(Ishop3Add)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+            name: { value: null, valid: true },
+            price: { value: null, valid: true },
+            URL_foto: { value: null, valid: true },
+            count: { value: null, valid: true }
+        }, _this.nameValid = function (EO) {
+            _this.setState({
+                name: {
+                    value: !(EO.target.value === _this.props.name) ? EO.target.value : _this.state.name.value,
+                    valid: EO.target.value !== ""
+                    // change: !(EO.target.value === this.props.name)
+                }
+            });
+        }, _this.priceValid = function (EO) {
+            _this.setState({
+                price: {
+                    value: !(EO.target.value === _this.props.price) ? EO.target.value : _this.state.price.value,
+                    valid: EO.target.value !== ""
+                    // change: !(EO.target.value === this.props.price)
+                }
+            });
+        }, _this.URL_fotoValid = function (EO) {
+            _this.setState({
+                URL_foto: {
+                    value: !(EO.target.value === _this.props.URL_foto) ? EO.target.value : _this.state.URL_foto.value,
+                    valid: EO.target.value !== ""
+                    // change: !(EO.target.value === this.props.URL_foto)
+                }
+            });
+        }, _this.countValid = function (EO) {
+            _this.setState({
+                count: {
+                    value: !(EO.target.value === _this.props.count) ? Number(EO.target.value) : _this.state.count.value,
+                    valid: EO.target.value !== "" && Number(EO.target.value)
+                    // change: !(Number(EO.target.value) === this.props.count)
+                }
+            });
+        }, _this.add = function (EO) {
+            var newItem = {
+                name: _this.state.name.value,
+                price: _this.state.price.value,
+                URL_foto: _this.state.URL_foto.value,
+                count: _this.state.count.value,
+                code: _this.props.code
+            };
+            _this.props.cbAddEndNewProduct(1, newItem);
+        }, _this.cancel = function (EO) {
+            _this.props.cbAddEndNewProduct();
+        }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+    // changeControl = () => {
+    //     for (let k in this.state) {
+    //         if (this.state[k].change) {
+    //             this.props.cbEditChangedProduct(true);
+    //             return;
+    //         }
+    //         ;
+    //     }
+    //     ;
+    //     this.props.cbEditChangedProduct(false);
+    // };
+
+    _createClass(Ishop3Add, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'Ishop3BlockAdd' },
+                _react2.default.createElement(
+                    'span',
+                    { className: 'caption' },
+                    'Edit existing Product'
+                ),
+                _react2.default.createElement(
+                    'span',
+                    null,
+                    'ID:',
+                    this.props.code
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Name'
+                    ),
+                    _react2.default.createElement('input', { type: 'text', onBlur: this.nameValid }),
+                    !this.state.name.valid ? _react2.default.createElement(
+                        'span',
+                        { className: 'Warning' },
+                        'Please, fill the field'
+                    ) : null
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Price'
+                    ),
+                    _react2.default.createElement('input', { type: 'text', onBlur: this.priceValid }),
+                    !this.state.price.valid ? _react2.default.createElement(
+                        'span',
+                        { className: 'Warning' },
+                        'Please, fill the field'
+                    ) : null
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'URL'
+                    ),
+                    _react2.default.createElement('input', { type: 'text', onBlur: this.URL_fotoValid }),
+                    !this.state.URL_foto.valid ? _react2.default.createElement(
+                        'span',
+                        { className: 'Warning' },
+                        'Please, fill the field'
+                    ) : null
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'item' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Quantity'
+                    ),
+                    _react2.default.createElement('input', { type: 'text', onBlur: this.countValid }),
+                    !this.state.count.valid ? _react2.default.createElement(
+                        'span',
+                        { className: 'Warning' },
+                        'Please, fill the field'
+                    ) : null
+                ),
+                _react2.default.createElement(
+                    'button',
+                    {
+                        disabled: !this.state.price.valid || !this.state.URL_foto.valid || !this.state.count.valid || !this.state.name.valid || this.state.name.value === null || this.state.price.value === null || this.state.URL_foto.value === null || this.state.count.value === null,
+                        onClick: this.add },
+                    'Add'
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: this.cancel },
+                    'Cancel'
+                )
+            );
+        }
+    }]);
+
+    return Ishop3Add;
+}(_react2.default.Component);
+
+Ishop3Add.propTypes = {
+    code: _propTypes2.default.number.isRequired,
+    cbAddEndNewProduct: _propTypes2.default.func.isRequired
+    // cbEditChangedProduct: PropTypes.func.isRequired,
+};
+;
+
+exports.default = Ishop3Add;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = [{"name":"apple","price":"5$","URL_foto":"img","count":100},{"name":"lime","price":"15$","URL_foto":"img","count":30},{"name":"pineapple","price":"30$","URL_foto":"img","count":50},{"name":"pear","price":"30$","URL_foto":"img","count":50}]

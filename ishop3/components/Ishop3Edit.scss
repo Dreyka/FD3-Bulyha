@@ -1,0 +1,23 @@
+.Ishop3BlockEdit {
+  > .caption {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 28px;
+  }
+
+  > span {
+    display: block;
+    font-size: 18px;
+    line-height: 20px;
+  }
+  > .item{
+    display: grid;
+    grid-template-columns: 10% 20% 30%;
+    padding: 5px 0px;
+    > span.Warning{
+      font-weight: bold;
+      padding: 0px 0px 0px 5px;
+      color: red;
+    }
+  }
+}

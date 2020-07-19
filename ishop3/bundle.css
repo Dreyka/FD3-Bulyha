@@ -12,6 +12,15 @@ body {
     font-weight: bold;
     line-height: 30px;
     padding: 0px 15px; }
+
+.Ishop3BlockProductSelected > span {
+  display: block;
+  font-size: 18px;
+  line-height: 20px; }
+.Ishop3BlockProductSelected > .caption {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 28px; }
 .Ishop2BlockItemRow {
   display: grid;
   grid-template-columns: 15% 15% 25% 15% 30%;
@@ -19,9 +28,10 @@ body {
   font-size: 20px;
   font-weight: normal;
   line-height: 30px;
-  padding: 0px 15px; }
+  padding: 0px 15px;
+  cursor: pointer; }
 
-.Ishop2BlockItemRow[data-select="true"] {
+div.Ishop2BlockItemRow[data-select="true"] {
   background-color: #ff7f50;
   transition: 0.5s; }
 
@@ -29,5 +39,39 @@ body {
   background-color: #ffffff;
   transition: 0.5s; }
 
+.Ishop2BlockItemRow:hover {
+  background-color: azure; }
+.Ishop3BlockEdit > .caption {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 28px; }
+.Ishop3BlockEdit > span {
+  display: block;
+  font-size: 18px;
+  line-height: 20px; }
+.Ishop3BlockEdit > .item {
+  display: grid;
+  grid-template-columns: 10% 20% 30%;
+  padding: 5px 0px; }
+  .Ishop3BlockEdit > .item > span.Warning {
+    font-weight: bold;
+    padding: 0px 0px 0px 5px;
+    color: red; }
+.Ishop3BlockAdd > .caption {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 28px; }
+.Ishop3BlockAdd > span {
+  display: block;
+  font-size: 18px;
+  line-height: 20px; }
+.Ishop3BlockAdd > .item {
+  display: grid;
+  grid-template-columns: 10% 20% 30%;
+  padding: 5px 0px; }
+  .Ishop3BlockAdd > .item > span.Warning {
+    font-weight: bold;
+    padding: 0px 0px 0px 5px;
+    color: red; }
 
 /*# sourceMappingURL=bundle.css.map*/

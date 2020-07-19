@@ -16,3 +16,15 @@ body {
     padding: 0px 15px;
   }
 }
+.Ishop3BlockProductSelected{
+  > span{
+    display: block;
+    font-size: 18px;
+    line-height: 20px;
+  }
+  > .caption{
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 28px;
+  }
+}

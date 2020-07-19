@@ -23,26 +23,21 @@ let Ishop2Block = React.createClass({
         return {
             head: this.props.head.slice(),
             products: this.props.products.slice(),
-            isSelected: {mode:false, code:-1},
+            isSelected: -1,
         };
     },
 
     delProduct: function (code) {
-        for (let i = 0; i < this.state.products.length; i++) {
-            if (this.state.products[i].code === code) {
-                this.state.products.splice(i, 1);
-            }
-            ;
-        }
-        ;
-        this.setState({products: this.state.products});
+        if (this.state.isSelected === code) this.state.isSelected = -1;
+        this.setState({products: this.state.products.filter(v => v.code != code)});
     },
     selectProduct: function (code) {
-        if (this.state.isSelected.code===code) {
-            this.setState({isSelected: {mode:false, code:-1}});
+        if (this.state.isSelected === code) {
+            this.setState({isSelected: -1});
         } else {
-            this.setState({isSelected: {mode:true, code:code}});
-        };
+            this.setState({isSelected: code});
+        }
+        ;
     },
     render: function () {
         let productsCode = this.state.products.map(v => React.createElement(Ishop2Product, {
@@ -51,7 +46,7 @@ let Ishop2Block = React.createClass({
             URL_foto: v.URL_foto,
             count: v.count,
             code: v.code,
-            isSelected: ((v.code===this.state.isSelected.code) ? true: false),
+            isSelected: ((v.code === this.state.isSelected) ? true : false),
             cbDelProduct: this.delProduct,
             cbSelectProduct: this.selectProduct,
         }));

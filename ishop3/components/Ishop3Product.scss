@@ -6,16 +6,20 @@
   font-weight: normal;
   line-height: 30px;
   padding: 0px 15px;
+  cursor: pointer;
   > .ButtonsControl{
 
   }
 }
 
-.Ishop2BlockItemRow[data-select="true"] {
+div.Ishop2BlockItemRow[data-select="true"] {
   background-color: #ff7f50;
   transition: 0.5s;
 }
 .Ishop2BlockItemRow[data-select="false"] {
   background-color: #ffffff;
   transition: 0.5s;
+}
+.Ishop2BlockItemRow:hover {
+  background-color: azure;
 }
