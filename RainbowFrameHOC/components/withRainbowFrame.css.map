@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,iBAAiB;EACf,KAAK,EAAE,GAAG;EACV,UAAU,EAAE,MAAM;EAElB,uBAAM;IACJ,KAAK,EAAE,IAAI;IACX,MAAM,EAAE,IAAI;IACZ,YAAY,EAAE,KAAK;IACnB,YAAY,EAAE,GAAG;IACjB,OAAO,EAAE,GAAG;IACZ,UAAU,EAAE,UAAU",
+"sources": ["withRainbowFrame.scss"],
+"names": [],
+"file": "withRainbowFrame.css"
+}
